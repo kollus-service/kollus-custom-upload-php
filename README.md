@@ -3,6 +3,7 @@
 Upload media by Kollus Http-endpoint API : Sample Source
 
 ## Requirement
+
 * [php](http://php.net) : 5.5 above
    * module
       * [slimphp](https://www.slimframework.com/) : for sample code's web framework
@@ -10,7 +11,7 @@ Upload media by Kollus Http-endpoint API : Sample Source
       * [guzzle php http client](http://docs.guzzlephp.org/)
 * [jQuery](https://jquery.com) : 3.2.1
    * [Kollus Custom Upload By jQuery](https://github.com/kollus-service/kollus-custom-upload-jquery) library
-* [Boostrap 3](https://getbootstrap.com/docs/3.3/) : for smaple code
+* [Boostrap 3](https://getbootstrap.com/docs/3.3/) : for sample code
       
 ## Installation
 
@@ -50,6 +51,7 @@ Open browser '[http://localhost:8080](http://localhost:8080)'
 * Don't use 'iframe upload' and 'kollus progress api'
 
 ## Development flow
+
 1. Reqeust local server api for create 'upload url' on browser
    * '/api/upload/create_url' in public/index.php 
 2. Local server call kollus api and create kollus 'upload url'

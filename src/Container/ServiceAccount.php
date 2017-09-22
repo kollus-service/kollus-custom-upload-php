@@ -62,10 +62,17 @@ class ServiceAccount extends AbstractContainer
 
     /**
      * @return string
+     * @throws ContainerException
      */
     public function getSecurityKey()
     {
-        return $this->security_key;
+        if (isset($this->security_key) && !empty($this->security_key)) {
+            return (string)$this->security_key;
+        } elseif (isset($this->key) && !empty($this->key)) {
+            return (string)$this->key;
+        }
+
+        throw new ContainerException('Property "security_key" or "key" does not exist');
     }
 
     /**

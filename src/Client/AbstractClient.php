@@ -53,11 +53,6 @@ abstract class AbstractClient
     protected $serviceAccount;
 
     /**
-     * @var Container\LoginAccount $loginAccount
-     */
-    protected $loginAccount;
-
-    /**
      * @param string $domain
      * @param int $version
      * @param array $optParams
@@ -97,11 +92,11 @@ abstract class AbstractClient
     }
 
     /**
-     * @return string
+     * @param string $schema
      */
-    public function getLanguageKey()
+    public function setSchema($schema)
     {
-        return $this->languageKey;
+        $this->schema = $schema;
     }
 
     /**
@@ -118,22 +113,6 @@ abstract class AbstractClient
     public function getServiceAccount()
     {
         return $this->serviceAccount;
-    }
-
-    /**
-     * @param Container\LoginAccount $loginAccount
-     */
-    public function setLoginAccount(Container\LoginAccount $loginAccount)
-    {
-        $this->loginAccount = $loginAccount;
-    }
-
-    /**
-     * @return Container\LoginAccount
-     */
-    public function getLoginAccount()
-    {
-        return $this->loginAccount;
     }
 
     /**
