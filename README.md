@@ -1,4 +1,4 @@
-# Kollus Upload By PHP
+# Kollus Custom Upload By PHP
 
 Upload media by Kollus Http-endpoint API : Sample Source
 
@@ -52,11 +52,11 @@ Open browser '[http://localhost:8080](http://localhost:8080)'
 
 ## Development flow
 
-1. Reqeust local server api for create 'upload url' on browser
+1. Request local server api for create 'upload url' on browser
    * '/api/upload/create_url' in public/index.php 
-2. Local server call kollus api and create kollus 'upload url'
-   * use get_upload_url_response in \Kollus\Component\Client\ApiClient.php
-3. Upload file to kollus 'upload url'
+2. Local server call kollus api and create 'kollus upload url'
+   * use get_upload_url_response in src/Client/ApiClient.php
+3. Upload file to 'kollus upload url'
    * use upload-file event in public/js/default.js
 
 ### Important code
@@ -124,6 +124,7 @@ src/Client/ApiClient.php
 ```
 
 public/js/default.js
+
 ```javascript
 /**
  * Kollus Upload JS by JQuery
@@ -235,7 +236,6 @@ $(document).on('click', 'button[data-action=upload-file]', function (e) {
         ...
 });
 ```
-
 
 ## License
 See `LICENSE` for more information

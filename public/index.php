@@ -86,18 +86,18 @@ $app->get('/', function (Request $request, Response $response) use ($container) 
     $kollusApiClient = $container->get('kollusApiClient');
     /** @var \Kollus\Component\Client\ApiClient $kollusApiClient */
 
-    $data['categories'] = [];
-    $data['upload_files'] = [];
+    $existsConfig = !empty($kollusSettings);
+
+    $data = [
+        'existsConfig' => $existsConfig,
+        'kollus' => $kollusSettings,
+        'categories' => [],
+        'upload_files' => [],
+    ];
+
     if ($kollusApiClient instanceof \Kollus\Component\Client\ApiClient) {
         $data['categories'] = $kollusApiClient->getCategories();
-
-        $result = $kollusApiClient->findUploadFilesByPage(1, ['per_page' => 10]);
-        $data['upload_files'] = $result->items;
     }
-    $data['config_not_exist'] = empty($kollusSettings) && is_null($kollusApiClient);
-    $data['service_account_key'] = isset($kollusSettings['service_account']['key']) ?
-        $kollusSettings['service_account']['key'] : null;
-    $data['kollus_domain'] = isset($kollusSettings['domain']) ? $kollusSettings['domain'] : null;
 
     // Render index view
     return $this->renderer->render($response, 'index.phtml', $data);
