@@ -38,9 +38,9 @@ abstract class AbstractClient
     protected $version;
 
     /**
-     * @var string $schema
+     * @var string $scheme
      */
-    protected $schema = 'http';
+    protected $scheme = 'http';
 
     /**
      * @var array $optParams
@@ -86,17 +86,17 @@ abstract class AbstractClient
     /**
      * @return string
      */
-    public function getSchema()
+    public function getScheme()
     {
-        return $this->schema;
+        return $this->scheme;
     }
 
     /**
-     * @param string $schema
+     * @param string $scheme
      */
-    public function setSchema($schema)
+    public function setScheme($scheme)
     {
-        $this->schema = $schema;
+        $this->scheme = $scheme;
     }
 
     /**

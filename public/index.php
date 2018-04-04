@@ -59,6 +59,13 @@ $container['kollusApiClient'] = function ($c) {
         $apiClient = new \Kollus\Component\Client\ApiClient($settings['domain'], $settings['version']);
         $serviceAccount = new \Kollus\Component\Container\ServiceAccount($settings['service_account']);
         $apiClient->setServiceAccount($serviceAccount);
+        if (isset($settings['api_domain'])) {
+            $apiClient->setApiDomain($settings['api_domain']);
+        }
+        if (isset($settings['upload_api_domain'])) {
+            $apiClient->setUploadApiDomain($settings['upload_api_domain']);
+        }
+//        $apiClient->setSchema('https');
         $apiClient->connect();
     }
 

@@ -3,16 +3,29 @@
 namespace Kollus\Component\Client;
 
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Kollus\Component\Container;
 
 class ApiClient extends AbstractClient
 {
     /**
-     * @var HttpClient $client
+     * @var HttpClient
      */
     protected $client;
 
     /**
+     * @var string
+     */
+    protected $apiDomain;
+
+    /**
+     * @var string
+     */
+    protected $uploadApiDomain;
+
+    /**
+     * getResponseJSON
+     *
      * @param string $method
      * @param string $uri
      * @param array $optParams
@@ -21,6 +34,7 @@ class ApiClient extends AbstractClient
      * @param int $retry
      * @return mixed
      * @throws ClientException
+     * @throws GuzzleException
      */
     private function getResponseJSON(
         $method,
@@ -59,6 +73,8 @@ class ApiClient extends AbstractClient
     }
 
     /**
+     * connect
+     *
      * @param mixed|null $client
      * @return self
      * @throws ClientException
@@ -81,9 +97,9 @@ class ApiClient extends AbstractClient
 
         if (is_null($client)) {
             $this->client = new HttpClient([
-                'base_uri' => $this->schema . '://api.' . $this->domain . '/' . $this->version . '/',
+                'base_uri' => $this->scheme . '://' . $this->getApiDomain() . '/' . $this->version . '/',
                 'defaults' => ['allow_redirects' => false],
-                'verify' => false,
+                'verify' => true,
             ]);
         } else {
             $this->client = $client;
@@ -93,8 +109,9 @@ class ApiClient extends AbstractClient
     }
 
     /**
+     * disconnect
+     *
      * @return self
-     * @throws ClientException
      */
     public function disconnect()
     {
@@ -103,10 +120,47 @@ class ApiClient extends AbstractClient
     }
 
     /**
+     * @return string
+     */
+    public function getApiDomain()
+    {
+        if (empty($this->apiDomain)) {
+            return 'api.' . $this->domain;
+        }
+
+        return $this->apiDomain;
+    }
+
+    /**
+     * @param string $apiDomain
+     */
+    public function setApiDomain($apiDomain)
+    {
+        $this->apiDomain = $apiDomain;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUploadApiDomain()
+    {
+        return $this->uploadApiDomain;
+    }
+
+    /**
+     * @param string $uploadApiDomain
+     */
+    public function setUploadApiDomain($uploadApiDomain)
+    {
+        $this->uploadApiDomain = $uploadApiDomain;
+    }
+
+    /**
      * @param array $getParams
      * @param bool|false $force
      * @return Container\ContainerArray
      * @throws ClientException
+     * @throws GuzzleException
      */
     public function getCategories(array $getParams = [], $force = false)
     {
@@ -144,6 +198,7 @@ class ApiClient extends AbstractClient
      * @param int $expireTime
      * @return object
      * @throws ClientException
+     * @throws GuzzleException
      */
     public function getUploadURLResponse(
         $categoryKey = null,
@@ -161,7 +216,12 @@ class ApiClient extends AbstractClient
             'title' => (empty($title) ? null : $title)
         ];
 
-        $response = $this->getResponseJSON('POST', 'media_auth/upload/create_url.json', [], $postParams);
+        $uploadApiUrl = 'media_auth/upload/create_url.json';
+        if ($this->uploadApiDomain) {
+            $uploadApiUrl = $this->scheme . '://' . $this->uploadApiDomain . '/api/v1/create_url';
+        }
+
+        $response = $this->getResponseJSON('POST', $uploadApiUrl, [], $postParams);
         if (!isset($response->result)) {
             throw new ClientException('Response is invalid.');
         }
@@ -170,11 +230,14 @@ class ApiClient extends AbstractClient
     }
 
     /**
+     * findUploadFilesByPage
+     *
      * @param int $page
      * @param array $getParams
      * @param bool|false $force
      * @return object
      * @throws ClientException
+     * @throws GuzzleException
      */
     public function findUploadFilesByPage($page = 1, array $getParams = [], $force = false)
     {
@@ -208,9 +271,13 @@ class ApiClient extends AbstractClient
     }
 
     /**
+     * getUploadFiles
+     *
      * @param array $getParams
      * @param bool|false $force
      * @return Container\ContainerArray
+     * @throws ClientException
+     * @throws GuzzleException
      */
     public function getUploadFiles(array $getParams = [], $force = false)
     {
